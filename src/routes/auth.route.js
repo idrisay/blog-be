@@ -13,7 +13,14 @@ router.post("/check-login", async (req, res) => {
     const { email, firstName, lastName, isAdmin } = await User.findOne({
       _id: decoded.userId,
     });
-    response = { loggedIn: true, email, firstName, lastName, isAdmin, id: decoded.userId };
+    response = {
+      loggedIn: true,
+      email,
+      firstName,
+      lastName,
+      isAdmin,
+      id: decoded.userId,
+    };
   } catch (error) {
     // console.log(error);
   }
@@ -38,7 +45,16 @@ router.post("/login", async (req, res) => {
 
     // Create and send JWT
     const token = jwt.sign({ userId: user._id }, "secret", { expiresIn: "1d" });
-    res.status(200).json({ message: "Login successful", token });
+    res
+      .status(200)
+      .json({
+        message: "Login successful",
+        token,
+        firstName: user?.firstName,
+        lastName: user?.lastName,
+        isAdmin: user?.isAdmin,
+        email: user?.email
+      });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
