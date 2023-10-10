@@ -3,8 +3,22 @@ const BlogModel = require("../models/Blog");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const products = await BlogModel.find({});
-  res.json(products);
+  try {
+    // Check if the "author" query parameter is provided
+    if (req.query.author) {
+      const authorId = req.query.author;
+      // Use the "find" method to filter blogs by author
+      const blogs = await BlogModel.find({ author: authorId });
+      res.json(blogs);
+    } else {
+      // If "author" query parameter is not provided, fetch all blogs
+      const blogs = await BlogModel.find({});
+      res.json(blogs);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 router.post("/", async (req, res) => {
