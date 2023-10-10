@@ -53,7 +53,8 @@ router.post("/login", async (req, res) => {
         firstName: user?.firstName,
         lastName: user?.lastName,
         isAdmin: user?.isAdmin,
-        email: user?.email
+        email: user?.email,
+        id: user?.id,
       });
   } catch (error) {
     console.error(error);
