@@ -21,6 +21,26 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Route to get all blogs or a specific blog by ID
+router.get("/:id", async (req, res) => {
+  try {
+    // Extract the blog ID from the URL parameters
+    const blogId = req.params.id;
+
+    // Use the "findById" method to find a blog by its ID
+    const blog = await BlogModel.findById(blogId);
+
+    if (!blog) {
+      return res.status(404).json({ error: "Blog not found" });
+    }
+
+    res.json(blog);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     let response = await BlogModel.create(req.body);
