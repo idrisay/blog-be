@@ -22,7 +22,7 @@ router.post("/check-login", async (req, res) => {
       id: decoded.userId,
     };
   } catch (error) {
-    // console.log(error);
+    console.error(error);
   }
   res.status(200).json({ message: "success", ...response });
 });
@@ -44,18 +44,16 @@ router.post("/login", async (req, res) => {
     }
 
     // Create and send JWT
-    const token = jwt.sign({ userId: user._id }, "secret", { expiresIn: "1d" });
-    res
-      .status(200)
-      .json({
-        message: "Login successful",
-        token,
-        firstName: user?.firstName,
-        lastName: user?.lastName,
-        isAdmin: user?.isAdmin,
-        email: user?.email,
-        id: user?.id,
-      });
+    const token = jwt.sign({ userId: user._id }, SECRET, { expiresIn: "24h" });
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      isAdmin: user?.isAdmin,
+      email: user?.email,
+      id: user?.id,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
@@ -87,8 +85,8 @@ router.post("/register", async (req, res) => {
     await newUser.save();
 
     // Create and send JWT
-    const token = jwt.sign({ userId: newUser._id }, "secret", {
-      expiresIn: "1d",
+    const token = jwt.sign({ userId: newUser._id }, SECRET, {
+      expiresIn: "24h",
     });
     res.status(201).json({ message: "User created successfully", token });
   } catch (error) {
