@@ -28,7 +28,14 @@ router.post("/update", async (req, res) => {
     // Save the updated user
     await user.save();
 
-    res.status(200).json({ message: "User updated successfully" });
+    res.status(200).json({
+      message: "User updated successfully",
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: user.email,
+      isAdmin: user?.isAdmin,
+      id: user?.id,
+    });
   } catch (error) {
     // Handle the JWT verification error here
     return res
